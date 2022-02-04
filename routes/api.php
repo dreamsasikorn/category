@@ -19,5 +19,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-// Route::get('/categories', [CategoryController::class, 'index'])->name('show_categories');
+Route::get('/categories', [CategoryController::class, 'index'])->name('show_categories');
 Route::post('/add_category', [CategoryController::class, 'store'])->name('add_category');
+Route::get('category_id/{id}', [CategoryController::class, 'show']);

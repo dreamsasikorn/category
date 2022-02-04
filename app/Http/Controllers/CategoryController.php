@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Resources\IndexCategoryResource;
@@ -11,21 +12,28 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        /* Creating a view called categories.blade.php and passing in the categories variable. */
-        /* This code is retrieving all the categories from the database and storing them in the
-         variable. */
         $categories = Category::get();
-        return view('categories', compact('categories'));
+        // return view('categories', compact('categories'));
+        return [
+            'categories' => IndexCategoryResource::collection($categories)
+        ];
     }
     public function store(Request $request)
     {
-        /* We create a new Category object, and set the name property to the value of the name input
-        field. Then we save the new Category object to the database. */
         if ($request) {
             $addCategory = new Category();
             $addCategory->name = $request->name;
             $addCategory->save();
             return redirect()->route('index_categories');
         }
+    }
+
+    public function show(Request $request)
+    {
+        $id = $request->id;
+        $data = Category::where('id', $id)->first();
+        // return CategoryResource::collection($data);
+        return new CategoryResource($data);
+        // return $id;
     }
 }
